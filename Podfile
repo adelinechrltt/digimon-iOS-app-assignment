@@ -6,6 +6,7 @@ target 'DigimonAssignment' do
   use_frameworks!
 
   # Pods for DigimonAssignment
+  pod 'SwiftLint'
 
   target 'DigimonAssignmentTests' do
     inherit! :search_paths
