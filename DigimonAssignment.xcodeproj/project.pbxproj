@@ -31,6 +31,7 @@
 		7E53B6312F0D668800759E06 /* DigimonAssignment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DigimonAssignment.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E53B6412F0D668A00759E06 /* DigimonAssignmentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DigimonAssignmentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E53B64B2F0D668A00759E06 /* DigimonAssignmentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DigimonAssignmentUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7ECF9B052F0E984E0041D2F5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		C54FF598AD39F15D9214E195 /* Pods-DigimonAssignment-DigimonAssignmentUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DigimonAssignment-DigimonAssignmentUITests.debug.xcconfig"; path = "Target Support Files/Pods-DigimonAssignment-DigimonAssignmentUITests/Pods-DigimonAssignment-DigimonAssignmentUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E84CB796817F44A1ECE67C4D /* Pods-DigimonAssignment-DigimonAssignmentUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DigimonAssignment-DigimonAssignmentUITests.release.xcconfig"; path = "Target Support Files/Pods-DigimonAssignment-DigimonAssignmentUITests/Pods-DigimonAssignment-DigimonAssignmentUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,6 +82,7 @@
 		64AC715249F979F9FB42EDBE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7ECF9B052F0E984E0041D2F5 /* CoreData.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
