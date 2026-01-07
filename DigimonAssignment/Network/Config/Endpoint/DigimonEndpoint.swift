@@ -11,15 +11,12 @@ enum DigimonEndpoint: EndpointProtocol {
     var baseURL: String {
         return APIConfig.digimonURL
     }
-    
-    case all
-    case single
-    
+
+    case base
+
     var path: String {
         switch self {
-        case .all:
-            return "pageSize=8&page="
-        case .single:
+        case .base:
             return ""
         }
     }
