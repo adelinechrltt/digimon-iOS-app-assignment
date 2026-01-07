@@ -10,8 +10,12 @@ import CoreData
 
 final class PersistenceController {
     static let shared = PersistenceController()
-
+    
     let container: NSPersistentContainer
+
+    var viewContext: NSManagedObjectContext {
+        container.viewContext
+    }
 
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "DigimonAssignmentModels")
