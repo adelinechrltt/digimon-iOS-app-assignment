@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(DescriptionEntity)
+
 public class DescriptionEntity: NSManagedObject {
 
 }

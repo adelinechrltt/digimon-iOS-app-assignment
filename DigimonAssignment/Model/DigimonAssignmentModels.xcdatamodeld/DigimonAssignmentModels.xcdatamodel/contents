@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24D81" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
-    <entity name="DescriptionEntity" representedClassName="DescriptionEntity" syncable="YES" codeGenerationType="class">
+    <entity name="DescriptionEntity" representedClassName=".DescriptionEntity" syncable="YES">
         <attribute name="desc" optional="YES" attributeType="String"/>
         <attribute name="language" optional="YES" attributeType="String"/>
         <attribute name="origin" optional="YES" attributeType="String"/>
         <relationship name="digimon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DigimonEntity" inverseName="descriptions" inverseEntity="DigimonEntity"/>
     </entity>
-    <entity name="DigimonEntity" representedClassName="DigimonEntity" syncable="YES" codeGenerationType="class">
+    <entity name="DigimonEntity" representedClassName=".DigimonEntity" syncable="YES">
         <attribute name="attribute" optional="YES" attributeType="String"/>
         <attribute name="field" optional="YES" attributeType="Transformable"/>
         <attribute name="fieldImage" optional="YES" attributeType="Transformable"/>
