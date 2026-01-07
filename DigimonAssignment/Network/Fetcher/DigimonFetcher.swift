@@ -9,9 +9,9 @@ import Foundation
 
 protocol DigimonFetcherProtocol: AnyObject {
 
-//    func fetchDigimonList(
-//        page: Int,
-//        completion: @escaping (Result<DigimonDTOArray, NetworkServiceError>) -> Void)
+    func fetchDigimonList(
+        page: Int,
+        completion: @escaping (Result<DigimonListResponseDTO, NetworkServiceError>) -> Void)
     
     func fetchDigimon(
         identifier: String,
@@ -25,21 +25,25 @@ final class DigimonFetcher: DigimonFetcherProtocol {
         self.networkService = networkService
     }
     
-//    func fetchDigimonList(
-//        page: Int, 
-//        completion: @escaping (
-//            Result<DigimonDTOArray,
-//            NetworkServiceError>)
-//        -> Void
-//    ) {
-//        networkService.request(
-//            urlString: DigimonEndpoint.all.urlString,
-//            method: .get,
-//            parameters:
-//                ["page": "\(page)"],
-//            completion: completion
-//            )
-//    }
+    func fetchDigimonList(
+        page: Int, 
+        completion: @escaping (
+            Result<DigimonListResponseDTO,
+            NetworkServiceError>)
+        -> Void
+    ) {
+        networkService.request(
+            urlString: DigimonEndpoint.base.urlString,
+            method: .get,
+            parameters:
+                [
+                    "pageSize": "8",
+                    "page": "\(page)"
+                ],
+            body: nil,
+            completion: completion
+            )
+    }
     
     func fetchDigimon(
         identifier: String,
@@ -49,10 +53,9 @@ final class DigimonFetcher: DigimonFetcherProtocol {
         -> Void
     ) {
         networkService.request(
-            urlString: DigimonEndpoint.single.urlString + "\(identifier)",
+            urlString: DigimonEndpoint.base.urlString + "\(identifier)",
             method: .get,
-            parameters:
-                [:],
+            parameters: [:],
             body: nil,
             completion: completion
             )
