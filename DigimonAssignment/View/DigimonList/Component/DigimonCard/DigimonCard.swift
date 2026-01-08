@@ -10,21 +10,13 @@ import SwiftUI
 struct DigimonCard: View {
 
     let cardSize: DigimonCardSize
-    let imageName: String = "https://digi-api.com/images/digimon/w/Agumon.png"
-    let digimonId: Int = 1
-    let digimonName: String = "Agumon"
-    let digimonLevel: String = "Perfect"
-    let digimonAttribute: String = "Water"
-    let digimonType: String = "Normal"
-    let digimonDescription: String =
-        "Although it is covered by a fur pelt, it is clearly a Reptile Digimon. When it is wearing the fur pelt, its personality does a complete 180° shift."
-    let digimonFields: [String] = ["lorem", "ipsum", "dolor", "sit"]
-
+    let digimon: Digimon
+    
     var body: some View {
         VStack(spacing: cardSize.verticalSpacing) {
             HStack(spacing: cardSize.horizontalSpacing) {
 
-                    AsyncImage(url: URL(string: imageName)) { phase in
+                AsyncImage(url: URL(string: digimon.images.first ?? "Lorem ipsum")) { phase in
                         switch phase {
                         case .empty:
                             ActivityIndicator(style: .large)
@@ -47,39 +39,39 @@ struct DigimonCard: View {
                     switch cardSize {
                     case .minimized:
                         VStack(alignment: .leading) {
-                            Text("#\(digimonId)")
+                            Text("#\(digimon.digimonId)")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
 
-                            Text(digimonName)
+                            Text(digimon.name)
                                 .font(.headline)
                                 .foregroundColor(.primary)
 
                             HStack {
-                                Text(digimonLevel)
+                                Text(digimon.levels.first ?? "Lorem ipsum")
                                     .font(.system(size: 9))
                                     .foregroundColor(.secondary)
 
                                 Spacer()
 
-                                Text(digimonAttribute)
+                                Text(digimon.attributes.first ?? "Lorem ipsum")
                                     .font(.system(size: 9))
                                     .foregroundColor(.secondary)
 
                                 Spacer()
 
-                                Text(digimonType)
+                                Text(digimon.types.first ?? "Lorem ipsum")
                                     .font(.system(size: 9))
                                     .foregroundColor(.secondary)
                             }
                         }
                     case .expanded:
                         VStack(alignment: .leading) {
-                            Text("#\(digimonId)")
+                            Text("#\(digimon.digimonId)")
                                 .font(.headline)
                                 .foregroundColor(.secondary)
 
-                            Text(digimonName)
+                            Text(digimon.name)
                                 .font(.title2)
                                 .foregroundColor(.primary)
                                 .fontWeight(.bold)
@@ -89,7 +81,7 @@ struct DigimonCard: View {
                                     Text("Level")
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
-                                    Text(digimonLevel)
+                                    Text(digimon.levels.first ?? "Lorem ipsum")
                                         .font(.caption)
                                 }
                                 Spacer()
@@ -97,7 +89,7 @@ struct DigimonCard: View {
                                     Text("Attribute")
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
-                                    Text(digimonAttribute)
+                                    Text(digimon.attributes.first ?? "Lorem ipsum")
                                         .font(.caption)
                                 }
                                 Spacer()
@@ -105,7 +97,7 @@ struct DigimonCard: View {
                                     Text("Type")
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
-                                    Text(digimonType)
+                                    Text(digimon.types.first ?? "Lorem ipsum")
                                         .font(.caption)
                                 }
                             }
@@ -119,7 +111,7 @@ struct DigimonCard: View {
             if cardSize == .expanded {
                 VStack(alignment: .center, spacing: 20) {
 
-                    if !digimonFields.isEmpty {
+                    if !digimon.fields.isEmpty {
                         VStack(spacing: 5) {
                             Text("Fields")
                                 .font(.subheadline)
@@ -127,7 +119,7 @@ struct DigimonCard: View {
                                 .foregroundColor(.primary)
                             HStack {
                                 Spacer()
-                                ForEach(digimonFields, id: \.self) { field in
+                                ForEach(digimon.fields, id: \.self) { field in
                                     Text(field)
                                         .font(.caption)
                                         .padding(4)
@@ -145,7 +137,7 @@ struct DigimonCard: View {
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
-                        Text(digimonDescription)
+                        Text(digimon.descriptions.first?.desc ?? "")
                             .font(.caption)
                             .foregroundColor(.primary)
                     }
@@ -168,25 +160,217 @@ struct DigimonCard: View {
 #Preview("Minimized card") {
     VStack {
         HStack {
-            DigimonCard(cardSize: .minimized)
-            DigimonCard(cardSize: .minimized)
+            DigimonCard(
+                cardSize: .minimized,
+                digimon:
+                    Digimon(
+                        digimonId: 1,
+                        name: "Agumon",
+                        xAntibody: false,
+                        releaseDate: "1997",
+                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
+                        imageTransparent: [true],
+                        levels: ["Child"],
+                        types: ["Reptile"],
+                        attributes: ["Vaccine"],
+                        fields: [
+                            "Deep Savers",
+                            "Dragon's Roar",
+                            "Metal Empire",
+                            "Nature Spirits",
+                            "Nightmare Soldiers",
+                            "Virus Busters"
+                        ],
+                        fieldImages: [],
+                        descriptions: [
+                            Description(
+                                language: "en_us",
+                                desc:
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                origin: "reference_book")
+                        ]))
+            DigimonCard(
+                cardSize: .minimized,
+                digimon:
+                    Digimon(
+                        digimonId: 1,
+                        name: "Agumon",
+                        xAntibody: false,
+                        releaseDate: "1997",
+                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
+                        imageTransparent: [true],
+                        levels: ["Child"],
+                        types: ["Reptile"],
+                        attributes: ["Vaccine"],
+                        fields: [
+                            "Deep Savers",
+                            "Dragon's Roar",
+                            "Metal Empire",
+                            "Nature Spirits",
+                            "Nightmare Soldiers",
+                            "Virus Busters"
+                        ],
+                        fieldImages: [],
+                        descriptions: [
+                            Description(
+                                language: "en_us",
+                                desc:
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                origin: "reference_book")
+                        ]))
         }
         HStack {
-            DigimonCard(cardSize: .minimized)
-            DigimonCard(cardSize: .minimized)
+            DigimonCard(
+                cardSize: .minimized,
+                digimon:
+                    Digimon(
+                        digimonId: 1,
+                        name: "Agumon",
+                        xAntibody: false,
+                        releaseDate: "1997",
+                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
+                        imageTransparent: [true],
+                        levels: ["Child"],
+                        types: ["Reptile"],
+                        attributes: ["Vaccine"],
+                        fields: [
+                            "Deep Savers",
+                            "Dragon's Roar",
+                            "Metal Empire",
+                            "Nature Spirits",
+                            "Nightmare Soldiers",
+                            "Virus Busters"
+                        ],
+                        fieldImages: [],
+                        descriptions: [
+                            Description(
+                                language: "en_us",
+                                desc:
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                origin: "reference_book")
+                        ]))
+            DigimonCard(
+                cardSize: .minimized,
+                digimon:
+                    Digimon(
+                        digimonId: 1,
+                        name: "Agumon",
+                        xAntibody: false,
+                        releaseDate: "1997",
+                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
+                        imageTransparent: [true],
+                        levels: ["Child"],
+                        types: ["Reptile"],
+                        attributes: ["Vaccine"],
+                        fields: [
+                            "Deep Savers",
+                            "Dragon's Roar",
+                            "Metal Empire",
+                            "Nature Spirits",
+                            "Nightmare Soldiers",
+                            "Virus Busters"
+                        ],
+                        fieldImages: [],
+                        descriptions: [
+                            Description(
+                                language: "en_us",
+                                desc:
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                origin: "reference_book")
+                        ]))
         }
         HStack {
-            DigimonCard(cardSize: .minimized)
-            DigimonCard(cardSize: .minimized)
-        }
-        HStack {
-            DigimonCard(cardSize: .minimized)
-            DigimonCard(cardSize: .minimized)
+            DigimonCard(
+                cardSize: .minimized,
+                digimon:
+                    Digimon(
+                        digimonId: 1,
+                        name: "Agumon",
+                        xAntibody: false,
+                        releaseDate: "1997",
+                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
+                        imageTransparent: [true],
+                        levels: ["Child"],
+                        types: ["Reptile"],
+                        attributes: ["Vaccine"],
+                        fields: [
+                            "Deep Savers",
+                            "Dragon's Roar",
+                            "Metal Empire",
+                            "Nature Spirits",
+                            "Nightmare Soldiers",
+                            "Virus Busters"
+                        ],
+                        fieldImages: [],
+                        descriptions: [
+                            Description(
+                                language: "en_us",
+                                desc:
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                origin: "reference_book")
+                        ]))
+            DigimonCard(
+                cardSize: .minimized,
+                digimon:
+                    Digimon(
+                        digimonId: 1,
+                        name: "Agumon",
+                        xAntibody: false,
+                        releaseDate: "1997",
+                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
+                        imageTransparent: [true],
+                        levels: ["Child"],
+                        types: ["Reptile"],
+                        attributes: ["Vaccine"],
+                        fields: [
+                            "Deep Savers",
+                            "Dragon's Roar",
+                            "Metal Empire",
+                            "Nature Spirits",
+                            "Nightmare Soldiers",
+                            "Virus Busters"
+                        ],
+                        fieldImages: [],
+                        descriptions: [
+                            Description(
+                                language: "en_us",
+                                desc:
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                origin: "reference_book")
+                        ]))
         }
     }
     .padding(.horizontal, 10)
 }
 
 #Preview("Expanded card") {
-    DigimonCard(cardSize: .expanded)
+    DigimonCard(
+        cardSize: .expanded,
+        digimon:
+            Digimon(
+                digimonId: 1,
+                name: "Agumon",
+                xAntibody: false,
+                releaseDate: "1997",
+                images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
+                imageTransparent: [true],
+                levels: ["Child"],
+                types: ["Reptile"],
+                attributes: ["Vaccine"],
+                fields: [
+                    "Deep Savers",
+                    "Dragon's Roar",
+                    "Metal Empire",
+                    "Nature Spirits",
+                    "Nightmare Soldiers",
+                    "Virus Busters"
+                ],
+                fieldImages: [],
+                descriptions: [
+                    Description(
+                        language: "en_us",
+                        desc:
+                            "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                        origin: "reference_book")
+                ]))
 }
