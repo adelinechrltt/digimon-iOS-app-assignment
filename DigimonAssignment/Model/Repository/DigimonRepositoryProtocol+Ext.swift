@@ -8,6 +8,8 @@
 import Foundation
 import SwiftData
 
+// TODO: Offline-first caching & SSOT design pattern will be implemented later, encountered problem with modelContext & threading
+
 /// For basic CRUD functions
 protocol DigimonRepositoryProtocol {
     func save(dto: DigimonDTO) throws -> Digimon
