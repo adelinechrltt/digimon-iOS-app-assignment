@@ -1,21 +1,21 @@
 //
-//  DigimonRepositoryNetwork.swift
+//  DigimonRepositoryNetworkProtocol.swift
 //  DigimonAssignment
 //
 //  Created by Adeline Charlotte Augustinne on 08/01/26.
 //
 
+
 import Foundation
 import SwiftData
 
 /// For data layer communication with network layer
-protocol DigimonRepositoryNetworkProtocol {
-    func mapDTOToEntity(_ dto: DigimonDTO) -> Digimon
-    func fetchPage(page: Int, completion: @escaping ([Digimon]) -> Void)
-    func fetchById(id: Int, completion: @escaping (Digimon?) -> Void)
+protocol AttributeRepositoryNetworkProtocol {
+    func mapDTOToEntity(_ dto: AttributeDetailDTO) -> Attribute
+    func fetchPage(page: Int, completion: @escaping ([Attribute]) -> Void)
 }
 
-extension DigimonRepository: DigimonRepositoryNetworkProtocol {
+extension MetadataRepository: DigimonRepositoryNetworkProtocol {
     
     func mapDTOToEntity(_ dto: DigimonDTO) -> Digimon {
         return Digimon(
