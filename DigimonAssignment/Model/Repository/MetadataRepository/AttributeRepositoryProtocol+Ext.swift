@@ -5,7 +5,6 @@
 //  Created by Adeline Charlotte Augustinne on 08/01/26.
 //
 
-
 import Foundation
 import SwiftData
 
@@ -14,88 +13,73 @@ protocol AttributeRepositoryNetworkProtocol {
     func mapDTOToEntity(_ dto: AttributeDetailDTO) -> Attribute
     func fetchAll(completion: @escaping ([Attribute]) -> Void)
     func fetchById(_ id: Int, completion: @escaping (Attribute?) -> Void)
-    func fetchByName(_ id: Int, completion: @escaping (Attribute?) -> Void)
+    func fetchByName(_ name: String, completion: @escaping (Attribute?) -> Void)
 }
 
 extension MetadataRepository: AttributeRepositoryNetworkProtocol {
-    
-    func mapDTOToEntity(_ dto: DigimonDTO) -> Digimon {
-        return Digimon(
-            digimonId: dto.id,
+    func mapDTOToEntity(_ dto: AttributeDetailDTO) -> Attribute {
+        return Attribute(
+            id: dto.id,
             name: dto.name,
-            xAntibody: dto.xAntibody,
-            releaseDate: dto.releaseDate,
-            images: dto.images.map { $0.href },
-            imageTransparent: dto.images.map { $0.transparent },
-            levels: dto.levels.map { $0.level },
-            types: dto.types.map { $0.type },
-            attributes: dto.attributes.map { $0.attribute },
-            fields: dto.fields.map { $0.field },
-            fieldImages: dto.fields.map { $0.image },
-            descriptions: dto.descriptions.map {
-                Description(language: $0.language, desc: $0.description, origin: $0.origin)
-            }
+            desc: dto.description
         )
     }
     
-    func fetchById(id: Int, completion: @escaping (Digimon?) -> Void) {
-        fetcher.fetchDigimon(identifier: "\(id)") { [weak self] result in
+    func fetchByName(_ name: String, completion: @escaping (Attribute?) -> Void) {
+        fetcher.fetchAttributeByName(name: name) { [weak self] (result: Result<AttributeListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
             
             switch result {
-            case .success(let dto):
-                let entity = self.mapDTOToEntity(dto)
-                completion(entity)
-            case .failure(let error):
-                completion(nil)
-            }
-        }
-    }
-
-    func fetchByName(name: String, completion: @escaping (Digimon?) -> Void) {
-        fetcher.fetchDigimon(identifier: name) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let dto):
-                let entity = self.mapDTOToEntity(dto)
-                completion(entity)
-            case .failure(let error):
+            case .success(let response):
+                guard let firstMatch = response.content.fields.first else {
+                    completion(nil)
+                    return
+                }
+                self.fetchById(firstMatch.id, completion: completion)
+                
+            case .failure:
                 completion(nil)
             }
         }
     }
     
-    func fetchPage(page: Int, completion: @escaping ([Digimon]) -> Void) {
-        fetcher.fetchDigimonList(page: page) { [weak self] result in
+    func fetchById(_ id: Int, completion: @escaping (Attribute?) -> Void) {
+        fetcher.fetchAttributeById(id: "\(id)") { [weak self] (result: Result<AttributeDetailDTO, NetworkServiceError>) in
             guard let self = self else { return }
-
+            
             switch result {
-            case .failure(let error):
-                print("List fetch error:", error)
-                completion([])
-                
+            case .success(let dto):
+                completion(self.mapDTOToEntity(dto))
+            case .failure:
+                completion(nil)
+            }
+        }
+    }
+    
+    func fetchAll(completion: @escaping ([Attribute]) -> Void) {
+        fetcher.fetchAttributeList { [weak self] (result: Result<AttributeListResponseDTO, NetworkServiceError>) in
+            guard let self = self else { return }
+            
+            switch result {
             case .success(let response):
                 let group = DispatchGroup()
-                var entities: [Digimon] = []
+                var attributes: [Attribute] = []
                 
-                for item in response.content {
+                for field in response.content.fields {
                     group.enter()
-                    self.fetcher.fetchDigimon(identifier: "\(item.id)") { detailResult in
-                        if case .success(let dto) = detailResult {
-                            let entity = self.mapDTOToEntity(dto)
-                            entities.append(entity)
-                        }
+                    self.fetchById(field.id) { entity in
+                        if let entity = entity { attributes.append(entity) }
                         group.leave()
                     }
                 }
                 
-                /// Sort to maintain order
                 group.notify(queue: .main) {
-                    let sorted = entities.sorted { $0.digimonId < $1.digimonId }
-                    completion(sorted)
+                    completion(attributes.sorted { $0.id < $1.id })
                 }
+            case .failure:
+                completion([])
             }
         }
     }
+    
 }

@@ -6,13 +6,11 @@
 //
 
 
-final class DigimonRepository {
+final class MetadataRepository {
 
-    let modelContext: ModelContext
-    let fetcher: DigimonFetcher
+    let fetcher: MetadataFetcher
 
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-        self.fetcher = DigimonFetcher()
+    init() {
+        self.fetcher = MetadataFetcher()
     }
 }
