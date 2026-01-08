@@ -49,25 +49,30 @@ struct DigimonCard: View {
                                 .lineLimit(1)
 
                             HStack {
-                                Text(digimon.levels.first ?? "")
-                                    .font(.system(size: 9))
-                                    .foregroundColor(.secondary)
-                                    .lineLimit(1)
+                                if let level =  digimon.levels.first,
+                                   level != "" {
+                                    Text(level)
+                                        .font(.system(size: 9))
+                                        .foregroundColor(.secondary)
+                                        .lineLimit(1)
+                                    Spacer()
+                                }
 
-                                Spacer()
-
-                                Text(digimon.attributes.first ?? "")
-                                    .font(.system(size: 9))
-                                    .foregroundColor(.secondary)
-                                    .lineLimit(1)
-
-                                Spacer()
-
-                                Text(digimon.types.first ?? "")
-                                    .font(.system(size: 9))
-                                    .foregroundColor(.secondary)
-                                    .lineLimit(1)
-
+                                if let attribute = digimon.attributes.first, attribute != "" {
+                                    Text(attribute)
+                                        .font(.system(size: 9))
+                                        .foregroundColor(.secondary)
+                                        .lineLimit(1)
+                                    
+                                    Spacer()
+                                }
+                                
+                                if let type = digimon.types.first, type != "" {
+                                    Text(digimon.types.first ?? "")
+                                        .font(.system(size: 9))
+                                        .foregroundColor(.secondary)
+                                        .lineLimit(1)
+                                }
                             }
                         }
                     case .expanded:
