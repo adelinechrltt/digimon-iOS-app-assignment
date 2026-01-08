@@ -9,9 +9,9 @@ import Foundation
 import SwiftData
 
 final class DigimonRepository {
-    
+
     let modelContext: ModelContext
-    
+
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
@@ -22,7 +22,7 @@ final class DigimonRepository {
         }
 
         let fetchDescriptor = FetchDescriptor<Digimon>(predicate: predicate)
-        
+
         if let existing = try modelContext.fetch(fetchDescriptor).first {
             return existing
         }
@@ -36,7 +36,7 @@ final class DigimonRepository {
         }
 
         let fetchDescriptor = FetchDescriptor<Digimon>(predicate: predicate)
-        
+
         if let existing = try modelContext.fetch(fetchDescriptor).first {
             return existing
         }
@@ -45,16 +45,22 @@ final class DigimonRepository {
     }
 
     func save(dto: DigimonDTO) throws -> Digimon {
-        
+
         if let digimon = try fetch(identifier: dto.id) {
             return update(digimon, with: dto)
         }
 
         return create(dto)
     }
-    
+
     private func create(_ dto: DigimonDTO) -> Digimon {
-        let descriptions = dto.descriptions.map { Description(language: $0.language, desc: $0.description, origin: $0.origin) }
+        let descriptions = dto.descriptions.map {
+            Description(
+                language: $0.language,
+                desc: $0.description,
+                origin: $0.origin
+            )
+        }
 
         let entity = Digimon(
             digimonId: (dto.id),
@@ -74,7 +80,7 @@ final class DigimonRepository {
         modelContext.insert(entity)
         return entity
     }
-    
+
     private func update(_ entity: Digimon, with dto: DigimonDTO) -> Digimon {
         entity.name = dto.name
         entity.xAntibody = dto.xAntibody
@@ -86,9 +92,15 @@ final class DigimonRepository {
         entity.attributes = dto.attributes.map { $0.attribute }
         entity.fields = dto.fields.map { $0.field }
         entity.fieldImages = dto.fields.map { $0.image }
-        
-        entity.descriptions = dto.descriptions.map { Description(language: $0.language, desc: $0.description, origin: $0.origin) }
-        
+
+        entity.descriptions = dto.descriptions.map {
+            Description(
+                language: $0.language,
+                desc: $0.description,
+                origin: $0.origin
+            )
+        }
+
         return entity
     }
 }

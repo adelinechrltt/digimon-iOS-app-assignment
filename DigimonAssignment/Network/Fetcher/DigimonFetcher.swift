@@ -12,7 +12,7 @@ protocol DigimonFetcherProtocol: AnyObject {
     func fetchDigimonList(
         page: Int,
         completion: @escaping (Result<DigimonListResponseDTO, NetworkServiceError>) -> Void)
-    
+
     func fetchDigimon(
         identifier: String,
         completion: @escaping (Result<DigimonDTO, NetworkServiceError>) -> Void
@@ -20,13 +20,13 @@ protocol DigimonFetcherProtocol: AnyObject {
 }
 
 final class DigimonFetcher: DigimonFetcherProtocol {
-    
+
     init(networkService: NetworkServiceProtocol = NetworkService.shared) {
         self.networkService = networkService
     }
-    
+
     func fetchDigimonList(
-        page: Int, 
+        page: Int,
         completion: @escaping (
             Result<DigimonListResponseDTO,
             NetworkServiceError>)
@@ -44,7 +44,7 @@ final class DigimonFetcher: DigimonFetcherProtocol {
             completion: completion
             )
     }
-    
+
     func fetchDigimon(
         identifier: String,
         completion: @escaping (
@@ -60,6 +60,6 @@ final class DigimonFetcher: DigimonFetcherProtocol {
             completion: completion
             )
     }
-    
+
     private let networkService: NetworkServiceProtocol
 }
