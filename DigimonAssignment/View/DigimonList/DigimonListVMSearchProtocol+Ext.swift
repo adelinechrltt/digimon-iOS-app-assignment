@@ -53,6 +53,13 @@ extension DigimonListViewModel: DigimonListVMSearchProtocol {
                 }
                 self?.isLoading = false
             }
+        case .type:
+            metadataRepo.fetchTypeByName(text) { [weak self] res in
+                if let attr = res {
+                    self?.displayItems = [.metadata(id: attr.id, name: attr.name, desc: attr.desc ?? "")]
+                }
+                self?.isLoading = false
+            }
         default:
             isLoading = false
         }
