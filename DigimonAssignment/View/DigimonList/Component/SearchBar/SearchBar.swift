@@ -39,7 +39,7 @@ struct SearchBar: View {
                 .cornerRadius(8)
             }
             
-            TextField("Search Digimon by \(selectedCategory.rawValue)...", text: $searchText)
+            TextField(renderSearchText(), text: $searchText)
                 .textFieldStyle(.roundedBorder)
                 .font(.subheadline)
             
@@ -57,6 +57,17 @@ struct SearchBar: View {
         .padding(.top, 5)
         .onChange(of: selectedCategory) { oldValue, newValue in
             onSearch?(searchText, newValue)
+        }
+    }
+    
+    private func renderSearchText() -> String {
+        switch self.selectedCategory {
+        case .id:
+            return "Search Digimon by \(selectedCategory.rawValue)..."
+        case .name:
+            return "Search Digimon by \(selectedCategory.rawValue)..."
+        default:
+            return "Search for \(selectedCategory.rawValue)..."
         }
     }
 }
