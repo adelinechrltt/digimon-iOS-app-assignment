@@ -12,7 +12,7 @@ import SwiftData
 struct DigimonAssignmentApp: App {
     var body: some Scene {
         WindowGroup {
-            DigimonListView()
+            DigimonListView(vm: DigimonListViewModel())
                 .modelContainer(for: Digimon.self)
         }
     }

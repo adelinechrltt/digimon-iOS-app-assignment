@@ -8,27 +8,33 @@
 import SwiftUI
 
 struct DigimonListView: View {
-    @State private var digimons: [DigimonCard] = []
-    @State private var page = 0
-    @State private var isLoading = false
-
-    private let columns = [GridItem(.flexible()), GridItem(.flexible())]
-    private let pageSize = 8
-
+    
+    @State var vm: DigimonListViewModel
+    
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 10) {
-                    ForEach(Array(digimons.enumerated()), id: \.offset) { index, card in
+                LazyVGrid(
+                    columns:
+                        [
+                            GridItem(.flexible()),
+                            GridItem(.flexible())
+                        ],
+                    spacing: 10) {
+                        ForEach(Array(vm.digimons.enumerated()), id: \.offset) { index, digimon in
                         NavigationLink {
-                            DigimonCard(cardSize: .expanded)
+                            DigimonCard(
+                                cardSize: .expanded,
+                                digimon: digimon)
                         } label: {
-                            card
+                            DigimonCard(
+                                cardSize: .minimized,
+                                digimon: digimon)
                         }
                     }
                 }
                 .padding(.horizontal, 10)
-                if self.page <= 2 {
+                if vm.page <= 1 {
                     Text("Scroll to view more entries")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -39,30 +45,17 @@ struct DigimonListView: View {
             .simultaneousGesture(
                 DragGesture().onEnded { value in
                     if value.translation.height < -50 {
-                        loadNextPage()
+                        vm.loadNextPage()
                     }
                 }
             )
             .onAppear {
-                if digimons.isEmpty { loadNextPage() }
+                if vm.digimons.isEmpty { vm.loadNextPage() }
             }
-        }
-    }
-
-    private func loadNextPage() {
-        guard !isLoading else { return }
-        isLoading = true
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let newCards = (0..<pageSize).map { _ in DigimonCard(cardSize: .minimized) }
-
-            self.digimons.append(contentsOf: newCards)
-            self.page += 1
-            self.isLoading = false
         }
     }
 }
 
 #Preview {
-    DigimonListView()
+    DigimonListView(vm: DigimonListViewModel())
 }
