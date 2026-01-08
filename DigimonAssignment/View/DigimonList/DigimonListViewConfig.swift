@@ -10,7 +10,7 @@ import Foundation
 enum DigimonDisplayItem: Identifiable {
     case digimon(Digimon)
     case metadata(id: Int, name: String, desc: String)
-    
+
     var id: String {
         switch self {
         case .digimon(let d): return "d-\(d.digimonId)"
