@@ -46,23 +46,28 @@ struct DigimonCard: View {
                             Text(digimon.name)
                                 .font(.headline)
                                 .foregroundColor(.primary)
+                                .lineLimit(1)
 
                             HStack {
-                                Text(digimon.levels.first ?? "Lorem ipsum")
+                                Text(digimon.levels.first ?? "")
                                     .font(.system(size: 9))
                                     .foregroundColor(.secondary)
+                                    .lineLimit(1)
 
                                 Spacer()
 
-                                Text(digimon.attributes.first ?? "Lorem ipsum")
+                                Text(digimon.attributes.first ?? "")
                                     .font(.system(size: 9))
                                     .foregroundColor(.secondary)
+                                    .lineLimit(1)
 
                                 Spacer()
 
-                                Text(digimon.types.first ?? "Lorem ipsum")
+                                Text(digimon.types.first ?? "")
                                     .font(.system(size: 9))
                                     .foregroundColor(.secondary)
+                                    .lineLimit(1)
+
                             }
                         }
                     case .expanded:
