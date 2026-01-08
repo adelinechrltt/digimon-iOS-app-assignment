@@ -13,7 +13,7 @@ enum DigimonDisplayItem: Identifiable {
 
     var id: String {
         switch self {
-        case .digimon(let d): return "d-\(d.digimonId)"
+        case .digimon(let digi): return "d-\(digi.digimonId)"
         case .metadata(let id, let name, _): return "m-\(id)-\(name)"
         }
     }
