@@ -20,13 +20,13 @@ protocol DigimonRepositoryProtocol {
         page: Int,
         pageSize: Int
     ) throws -> [Digimon]
-    
+
     func create(dto: DigimonDTO) -> Digimon
     func update(entity: Digimon, with dto: DigimonDTO) -> Digimon
 }
 
 extension DigimonRepository: DigimonRepositoryProtocol {
-    
+
     func fetch(identifier: Int) throws -> Digimon? {
         let predicate = #Predicate<Digimon> { digimon in
             digimon.digimonId == identifier
@@ -54,7 +54,7 @@ extension DigimonRepository: DigimonRepositoryProtocol {
 
         return nil
     }
-    
+
     func fetchCachedPage(
         page: Int,
         pageSize: Int
@@ -129,4 +129,3 @@ extension DigimonRepository: DigimonRepositoryProtocol {
         return entity
     }
 }
-
