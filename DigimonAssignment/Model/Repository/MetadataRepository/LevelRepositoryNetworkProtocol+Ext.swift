@@ -1,10 +1,9 @@
 //
-//  AttributeRepositoryNetworkProtocol+Ext.swift
+//  LevelRepositoryNetworkProtocol+Ext.swift
 //  DigimonAssignment
 //
 //  Created by Adeline Charlotte Augustinne on 09/01/26.
 //
-
 
 import Foundation
 import SwiftData
@@ -25,11 +24,11 @@ extension MetadataRepository: LevelRepositoryNetworkProtocol {
             desc: dto.description
         )
     }
-    
+
     func fetchLevelByName(_ name: String, completion: @escaping (Level?) -> Void) {
         fetcher.fetchLevelByName(name: name) { [weak self] (result: Result<LevelListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let response):
                 guard let fields = response.content.fields, let firstMatch = fields.first else {
@@ -37,17 +36,17 @@ extension MetadataRepository: LevelRepositoryNetworkProtocol {
                     return
                 }
                 self.fetchLevelById(firstMatch.id, completion: completion)
-                
+
             case .failure:
                 completion(nil)
             }
         }
     }
-    
+
     func fetchLevelById(_ id: Int, completion: @escaping (Level?) -> Void) {
         fetcher.fetchLevelById(id: "\(id)") { [weak self] (result: Result<LevelDetailDTO, NetworkServiceError>) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let dto):
                 completion(self.mapDTOToEntity(dto))
@@ -56,20 +55,20 @@ extension MetadataRepository: LevelRepositoryNetworkProtocol {
             }
         }
     }
-    
+
     func fetchAllLevels(completion: @escaping ([Level]) -> Void) {
         fetcher.fetchLevelList { [weak self] (result: Result<LevelListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let response):
                 let group = DispatchGroup()
                 var attributes: [Level] = []
-                
+
                 guard let fields = response.content.fields else {
                     return
                 }
-                
+
                 for field in fields {
                     group.enter()
                     self.fetchLevelById(field.id) { entity in
@@ -77,7 +76,7 @@ extension MetadataRepository: LevelRepositoryNetworkProtocol {
                         group.leave()
                     }
                 }
-                
+
                 group.notify(queue: .main) {
                     completion(attributes.sorted { $0.id < $1.id })
                 }
@@ -86,5 +85,4 @@ extension MetadataRepository: LevelRepositoryNetworkProtocol {
             }
         }
     }
-    
 }

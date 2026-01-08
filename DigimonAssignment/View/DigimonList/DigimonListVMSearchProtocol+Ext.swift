@@ -16,21 +16,21 @@ protocol DigimonListVMSearchProtocol {
 }
 
 extension DigimonListViewModel: DigimonListVMSearchProtocol {
-    
+
     func onSearchBarUpdated(text: String, category: SearchCategory) {
         self.selectedCategory = category
         self.displayItems.removeAll()
-        
+
         guard !text.isEmpty else {
             resetDisplayList()
             return
         }
-        
+
         isLoading = true
-        
+
         search(text: text, category: category)
     }
-    
+
     func search(text: String, category: SearchCategory){
         switch category {
         case .id, .name:
@@ -63,15 +63,13 @@ extension DigimonListViewModel: DigimonListVMSearchProtocol {
         case .field:
             metadataRepo.fetchFieldByName(text) { [weak self] res in
                 if let attr = res {
-                    self?.displayItems = [.metadata(id: attr.id, name: attr.name, desc: attr.desc ?? "")]
+                    self?.displayItems = [.metadata(id: attr.id, name: attr.name, desc: attr.desc)]
                 }
                 self?.isLoading = false
             }
-        default:
-            isLoading = false
         }
     }
-    
+
     func handleDigimonSearchResult(_ result: Digimon?) {
         DispatchQueue.main.async {
             self.displayItems = result != nil ? [.digimon(result!)] : []

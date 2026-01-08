@@ -10,11 +10,11 @@ import SwiftUI
 struct MetadataCard: View {
 
     let cardSize: DigimonCardSize = .minimized
-    
+
     var id: Int = 1
     var name: String = "Virus"
     var desc: String = "lorem ipsum dolor sit amet"
-    
+
     var body: some View {
         HStack(spacing: cardSize.horizontalSpacing) {
                 VStack(alignment: .leading) {

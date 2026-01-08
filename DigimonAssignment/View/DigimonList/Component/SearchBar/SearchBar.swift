@@ -12,7 +12,7 @@ struct SearchBar: View {
     @State private var searchText: String = ""
     @State private var selectedCategory: SearchCategory = .id
     var onSearch: ((String, SearchCategory) -> Void)?
-    
+
     var body: some View {
         HStack(spacing: 10) {
             Menu {
@@ -38,11 +38,11 @@ struct SearchBar: View {
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
             }
-            
+
             TextField(renderSearchText(), text: $searchText)
                 .textFieldStyle(.roundedBorder)
                 .font(.subheadline)
-            
+
             Button(action: {
                 onSearch?(searchText, selectedCategory)
             }) {
@@ -55,11 +55,11 @@ struct SearchBar: View {
         }
         .padding(.horizontal)
         .padding(.top, 5)
-        .onChange(of: selectedCategory) { oldValue, newValue in
+        .onChange(of: selectedCategory) { _, newValue in
             onSearch?(searchText, newValue)
         }
     }
-    
+
     private func renderSearchText() -> String {
         switch self.selectedCategory {
         case .id:

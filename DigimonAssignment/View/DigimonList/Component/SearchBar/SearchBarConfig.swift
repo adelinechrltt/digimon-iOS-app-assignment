@@ -15,6 +15,6 @@ enum SearchCategory: String, CaseIterable, Identifiable {
     case level = "Level"
     case attribute = "Attribute"
     case field = "Field"
-    
+
     var id: String { rawValue }
 }

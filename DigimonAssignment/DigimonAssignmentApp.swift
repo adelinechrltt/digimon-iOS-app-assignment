@@ -10,12 +10,20 @@ import SwiftData
 
 @main
 struct DigimonAssignmentApp: App {
+    let container: ModelContainer
+
+    init() {
+        do {
+            container = try ModelContainer(for: Digimon.self)
+        } catch {
+            fatalError("Failed to initialize ModelContainer: \(error)")
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
-            let container = try! ModelContainer(for: Digimon.self)
-
             DigimonListView(modelContext: container.mainContext)
-                .modelContainer(for: Digimon.self)
+                .modelContainer(container)
         }
     }
 }

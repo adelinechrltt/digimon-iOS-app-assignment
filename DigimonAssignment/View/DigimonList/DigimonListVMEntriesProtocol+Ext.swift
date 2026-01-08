@@ -18,7 +18,7 @@ protocol DigimonListVMEntriesProtocol {
 }
 
 extension DigimonListViewModel: DigimonListVMEntriesProtocol {
-   
+
     func loadNextDigimonPage() {
         guard !isLoading else { return }
         isLoading = true
@@ -29,7 +29,7 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
             self?.isLoading = false
         }
     }
-    
+
     func resetDisplayList() {
         switch selectedCategory {
         case .id, .name:
@@ -45,11 +45,11 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
             hydrateFieldsList()
         }
     }
-    
+
     func hydrateAttributesList() {
         metadataRepo.fetcher.fetchAttributeList { [weak self] (result: Result<AttributeListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let response):
                 let items = (response.content.fields ?? []).map { field in
@@ -59,12 +59,12 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
                         desc: ""
                     )
                 }
-                
+
                 DispatchQueue.main.async {
                     self.displayItems = items
                     self.isLoading = false
                 }
-                
+
             case .failure(let error):
                 print("Error hydrating attributes: \(error)")
                 DispatchQueue.main.async {
@@ -74,11 +74,11 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
             }
         }
     }
-    
+
     func hydrateLevelsList() {
         metadataRepo.fetcher.fetchLevelList { [weak self] (result: Result<LevelListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let response):
                 let items = (response.content.fields ?? []).map { field in
@@ -88,12 +88,12 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
                         desc: ""
                     )
                 }
-                
+
                 DispatchQueue.main.async {
                     self.displayItems = items
                     self.isLoading = false
                 }
-                
+
             case .failure(let error):
                 print("Error hydrating levels: \(error)")
                 DispatchQueue.main.async {
@@ -103,11 +103,11 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
             }
         }
     }
-    
+
     func hydrateTypesList() {
         metadataRepo.fetcher.fetchTypeList { [weak self] (result: Result<TypeListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let response):
                 let items = (response.content.fields ?? []).map { field in
@@ -117,12 +117,12 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
                         desc: ""
                     )
                 }
-                
+
                 DispatchQueue.main.async {
                     self.displayItems = items
                     self.isLoading = false
                 }
-                
+
             case .failure(let error):
                 print("Error hydrating types: \(error)")
                 DispatchQueue.main.async {
@@ -132,11 +132,11 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
             }
         }
     }
-    
+
     func hydrateFieldsList() {
         metadataRepo.fetcher.fetchFieldList { [weak self] (result: Result<FieldListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let response):
                 let items = (response.content.fields ?? []).map { field in
@@ -146,12 +146,12 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
                         desc: ""
                     )
                 }
-                
+
                 DispatchQueue.main.async {
                     self.displayItems = items
                     self.isLoading = false
                 }
-                
+
             case .failure(let error):
                 print("Error hydrating fields: \(error)")
                 DispatchQueue.main.async {
