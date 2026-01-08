@@ -68,12 +68,12 @@ struct DigimonListView: View {
                 DragGesture().onEnded { value in
                     guard vm.selectedCategory == .id || vm.selectedCategory == .name else { return }
                     if value.translation.height < -50 {
-                        vm.loadNextPage()
+                        vm.loadNextDigimonPage()
                     }
                 }
             )
             .onAppear {
-                vm.loadNextPage()
+                vm.loadNextDigimonPage()
             }
         }
     }
