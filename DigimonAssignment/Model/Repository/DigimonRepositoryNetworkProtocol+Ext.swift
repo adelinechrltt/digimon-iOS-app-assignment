@@ -35,6 +35,34 @@ extension DigimonRepository: DigimonRepositoryNetworkProtocol {
         )
     }
     
+    func fetchById(id: Int, completion: @escaping (Digimon?) -> Void) {
+        fetcher.fetchDigimon(identifier: "\(id)") { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let dto):
+                let entity = self.mapDTOToEntity(dto)
+                completion(entity)
+            case .failure(let error):
+                completion(nil)
+            }
+        }
+    }
+
+    func fetchByName(name: String, completion: @escaping (Digimon?) -> Void) {
+        fetcher.fetchDigimon(identifier: name) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let dto):
+                let entity = self.mapDTOToEntity(dto)
+                completion(entity)
+            case .failure(let error):
+                completion(nil)
+            }
+        }
+    }
+    
     func fetchPage(page: Int, completion: @escaping ([Digimon]) -> Void) {
         fetcher.fetchDigimonList(page: page) { [weak self] result in
             guard let self = self else { return }
