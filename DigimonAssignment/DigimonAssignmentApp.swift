@@ -11,7 +11,7 @@ import SwiftData
 @main
 struct DigimonAssignmentApp: App {
     let container: ModelContainer
-    
+
     init() {
         do {
             container = try ModelContainer(for: Digimon.self)
@@ -19,7 +19,7 @@ struct DigimonAssignmentApp: App {
             fatalError("Failed to initialize ModelContainer: \(error)")
         }
     }
-    
+
     var body: some Scene {
         WindowGroup {
             DigimonListView(modelContext: container.mainContext)
