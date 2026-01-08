@@ -40,6 +40,7 @@ final class DigimonListViewModel {
     
     func search(text: String, category: SearchCategory) {
         self.selectedCategory = category
+        self.displayItems.removeAll()
         
         guard !text.isEmpty else {
             switch selectedCategory {
