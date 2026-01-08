@@ -24,7 +24,7 @@ extension MetadataRepository: TypeRepositoryNetworkProtocol {
             desc: dto.description
         )
     }
-    
+
     func fetchTypeByName(_ name: String, completion: @escaping (TypeEntity?) -> Void) {
         fetcher.fetchTypeByName(name: name) { [weak self] (result: Result<TypeListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
@@ -42,7 +42,7 @@ extension MetadataRepository: TypeRepositoryNetworkProtocol {
             }
         }
     }
-    
+
     func fetchTypeById(_ id: Int, completion: @escaping (TypeEntity?) -> Void) {
         fetcher.fetchTypeById(id: "\(id)") { [weak self] (result: Result<TypeDetailDTO, NetworkServiceError>) in
             guard let self = self else { return }
@@ -55,7 +55,7 @@ extension MetadataRepository: TypeRepositoryNetworkProtocol {
             }
         }
     }
-    
+
     func fetchAllTypes(completion: @escaping ([TypeEntity]) -> Void) {
         fetcher.fetchTypeList { [weak self] (result: Result<TypeListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
