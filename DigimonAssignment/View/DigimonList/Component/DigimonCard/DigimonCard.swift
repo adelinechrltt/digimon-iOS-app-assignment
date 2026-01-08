@@ -11,7 +11,7 @@ struct DigimonCard: View {
 
     let cardSize: DigimonCardSize
     let digimon: Digimon
-    
+
     var body: some View {
         VStack(spacing: cardSize.verticalSpacing) {
             HStack(spacing: cardSize.horizontalSpacing) {
@@ -24,7 +24,7 @@ struct DigimonCard: View {
                             image
                                 .resizable()
                                 .scaledToFit()
-                        case .failure(_):
+                        case .failure:
                             Image("DigimonLogo")
                                 .resizable()
                                 .scaledToFit()
@@ -63,10 +63,10 @@ struct DigimonCard: View {
                                         .font(.system(size: 9))
                                         .foregroundColor(.secondary)
                                         .lineLimit(1)
-                                    
+
                                     Spacer()
                                 }
-                                
+
                                 if let type = digimon.types.first, type != "" {
                                     Text(digimon.types.first ?? "")
                                         .font(.system(size: 9))
@@ -165,7 +165,7 @@ struct DigimonCard: View {
             .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
         )
     }
-    
+
     private func getEnglishDescription() -> String {
         if let engDesc = digimon.descriptions.first(where: { $0.language.contains("en") })?.desc {
             return engDesc
@@ -203,7 +203,7 @@ struct DigimonCard: View {
                             Description(
                                 language: "en_us",
                                 desc:
-                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur.",
                                 origin: "reference_book")
                         ]))
             DigimonCard(
@@ -232,67 +232,7 @@ struct DigimonCard: View {
                             Description(
                                 language: "en_us",
                                 desc:
-                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
-                                origin: "reference_book")
-                        ]))
-        }
-        HStack {
-            DigimonCard(
-                cardSize: .minimized,
-                digimon:
-                    Digimon(
-                        digimonId: 1,
-                        name: "Agumon",
-                        xAntibody: false,
-                        releaseDate: "1997",
-                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
-                        imageTransparent: [true],
-                        levels: ["Child"],
-                        types: ["Reptile"],
-                        attributes: ["Vaccine"],
-                        fields: [
-                            "Deep Savers",
-                            "Dragon's Roar",
-                            "Metal Empire",
-                            "Nature Spirits",
-                            "Nightmare Soldiers",
-                            "Virus Busters"
-                        ],
-                        fieldImages: [],
-                        descriptions: [
-                            Description(
-                                language: "en_us",
-                                desc:
-                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
-                                origin: "reference_book")
-                        ]))
-            DigimonCard(
-                cardSize: .minimized,
-                digimon:
-                    Digimon(
-                        digimonId: 1,
-                        name: "Agumon",
-                        xAntibody: false,
-                        releaseDate: "1997",
-                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
-                        imageTransparent: [true],
-                        levels: ["Child"],
-                        types: ["Reptile"],
-                        attributes: ["Vaccine"],
-                        fields: [
-                            "Deep Savers",
-                            "Dragon's Roar",
-                            "Metal Empire",
-                            "Nature Spirits",
-                            "Nightmare Soldiers",
-                            "Virus Busters"
-                        ],
-                        fieldImages: [],
-                        descriptions: [
-                            Description(
-                                language: "en_us",
-                                desc:
-                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur.",
                                 origin: "reference_book")
                         ]))
         }
@@ -323,7 +263,7 @@ struct DigimonCard: View {
                             Description(
                                 language: "en_us",
                                 desc:
-                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur.",
                                 origin: "reference_book")
                         ]))
             DigimonCard(
@@ -352,7 +292,67 @@ struct DigimonCard: View {
                             Description(
                                 language: "en_us",
                                 desc:
-                                    "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur.",
+                                origin: "reference_book")
+                        ]))
+        }
+        HStack {
+            DigimonCard(
+                cardSize: .minimized,
+                digimon:
+                    Digimon(
+                        digimonId: 1,
+                        name: "Agumon",
+                        xAntibody: false,
+                        releaseDate: "1997",
+                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
+                        imageTransparent: [true],
+                        levels: ["Child"],
+                        types: ["Reptile"],
+                        attributes: ["Vaccine"],
+                        fields: [
+                            "Deep Savers",
+                            "Dragon's Roar",
+                            "Metal Empire",
+                            "Nature Spirits",
+                            "Nightmare Soldiers",
+                            "Virus Busters"
+                        ],
+                        fieldImages: [],
+                        descriptions: [
+                            Description(
+                                language: "en_us",
+                                desc:
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur.",
+                                origin: "reference_book")
+                        ]))
+            DigimonCard(
+                cardSize: .minimized,
+                digimon:
+                    Digimon(
+                        digimonId: 1,
+                        name: "Agumon",
+                        xAntibody: false,
+                        releaseDate: "1997",
+                        images: ["https://digi-api.com/images/digimon/w/Agumon.png"],
+                        imageTransparent: [true],
+                        levels: ["Child"],
+                        types: ["Reptile"],
+                        attributes: ["Vaccine"],
+                        fields: [
+                            "Deep Savers",
+                            "Dragon's Roar",
+                            "Metal Empire",
+                            "Nature Spirits",
+                            "Nightmare Soldiers",
+                            "Virus Busters"
+                        ],
+                        fieldImages: [],
+                        descriptions: [
+                            Description(
+                                language: "en_us",
+                                desc:
+                                    "A Reptile Digimon with an appearance resembling a small dinosaur.",
                                 origin: "reference_book")
                         ]))
         }
@@ -387,7 +387,7 @@ struct DigimonCard: View {
                     Description(
                         language: "en_us",
                         desc:
-                            "A Reptile Digimon with an appearance resembling a small dinosaur, it has grown and become able to walk on two legs.",
+                            "A Reptile Digimon with an appearance resembling a small dinosaur.",
                         origin: "reference_book")
                 ]))
 }

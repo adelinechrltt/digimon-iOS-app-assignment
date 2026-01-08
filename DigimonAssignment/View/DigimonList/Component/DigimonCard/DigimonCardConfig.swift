@@ -20,7 +20,7 @@ enum DigimonCardSize {
             return 100
         }
     }
-    
+
     var horizontalSpacing: CGFloat {
         switch self {
         case .minimized:
@@ -29,7 +29,7 @@ enum DigimonCardSize {
             return 20
         }
     }
-    
+
     var verticalSpacing: CGFloat {
         switch self {
         case .minimized:
@@ -56,7 +56,7 @@ enum DigimonCardSize {
             return 30
         }
     }
-    
+
     var cornerRadius: CGFloat {
         switch self {
         case .minimized:
