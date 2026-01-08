@@ -5,7 +5,6 @@
 //  Created by Adeline Charlotte Augustinne on 07/01/26.
 //
 
-
 import Foundation
 
 enum HTTPMethod: String {
