@@ -10,7 +10,7 @@ import SwiftUI
 struct DigimonCard: View {
 
     let cardSize: DigimonCardSize
-    let imageName: String = "DigimonLogo"
+    let imageName: String = "https://digi-api.com/images/digimon/w/Agumon.png"
     let digimonId: Int = 1
     let digimonName: String = "Agumon"
     let digimonLevel: String = "Perfect"
@@ -24,15 +24,25 @@ struct DigimonCard: View {
         VStack(spacing: cardSize.verticalSpacing) {
             HStack(spacing: cardSize.horizontalSpacing) {
 
-                Image(imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(
-                        width: cardSize.imageSize,
-                        height: cardSize.imageSize
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-
+                    AsyncImage(url: URL(string: imageName)) { phase in
+                        switch phase {
+                        case .empty:
+                            ActivityIndicator(style: .large)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        case .failure(_):
+                            Image("DigimonLogo")
+                                .resizable()
+                                .scaledToFit()
+                        @unknown default:
+                            Image("DigimonLogo")
+                                .resizable()
+                                .scaledToFit()
+                        }
+                }
+                .frame(width: cardSize.imageSize, height: cardSize.imageSize)
                 VStack(alignment: .leading) {
                     switch cardSize {
                     case .minimized:
