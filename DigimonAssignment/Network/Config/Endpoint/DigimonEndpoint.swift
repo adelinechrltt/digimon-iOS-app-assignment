@@ -12,12 +12,24 @@ enum DigimonEndpoint: EndpointProtocol {
         return APIConfig.digimonURL
     }
 
-    case base
+    case digimon
+    case attribute
+    case type
+    case level
+    case field
 
     var path: String {
         switch self {
-        case .base:
-            return ""
+        case .digimon:
+            return "digimon"
+        case .attribute:
+            return "attribute"
+        case .type:
+            return "type"
+        case .level:
+            return "level"
+        case .field:
+            return "field"
         }
     }
 }

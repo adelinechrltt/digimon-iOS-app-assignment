@@ -12,6 +12,7 @@ import SwiftData
 protocol DigimonRepositoryNetworkProtocol {
     func mapDTOToEntity(_ dto: DigimonDTO) -> Digimon
     func fetchPage(page: Int, completion: @escaping ([Digimon]) -> Void)
+    func fetchById(id: Int, completion: @escaping (Digimon?) -> Void)
 }
 
 extension DigimonRepository: DigimonRepositoryNetworkProtocol {
