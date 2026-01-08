@@ -46,23 +46,33 @@ struct DigimonCard: View {
                             Text(digimon.name)
                                 .font(.headline)
                                 .foregroundColor(.primary)
+                                .lineLimit(1)
 
                             HStack {
-                                Text(digimon.levels.first ?? "Lorem ipsum")
-                                    .font(.system(size: 9))
-                                    .foregroundColor(.secondary)
+                                if let level =  digimon.levels.first,
+                                   level != "" {
+                                    Text(level)
+                                        .font(.system(size: 9))
+                                        .foregroundColor(.secondary)
+                                        .lineLimit(1)
+                                    Spacer()
+                                }
 
-                                Spacer()
-
-                                Text(digimon.attributes.first ?? "Lorem ipsum")
-                                    .font(.system(size: 9))
-                                    .foregroundColor(.secondary)
-
-                                Spacer()
-
-                                Text(digimon.types.first ?? "Lorem ipsum")
-                                    .font(.system(size: 9))
-                                    .foregroundColor(.secondary)
+                                if let attribute = digimon.attributes.first, attribute != "" {
+                                    Text(attribute)
+                                        .font(.system(size: 9))
+                                        .foregroundColor(.secondary)
+                                        .lineLimit(1)
+                                    
+                                    Spacer()
+                                }
+                                
+                                if let type = digimon.types.first, type != "" {
+                                    Text(digimon.types.first ?? "")
+                                        .font(.system(size: 9))
+                                        .foregroundColor(.secondary)
+                                        .lineLimit(1)
+                                }
                             }
                         }
                     case .expanded:
@@ -137,7 +147,7 @@ struct DigimonCard: View {
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
-                        Text(digimon.descriptions.first?.desc ?? "")
+                        Text(getEnglishDescription())
                             .font(.caption)
                             .foregroundColor(.primary)
                     }
@@ -154,6 +164,13 @@ struct DigimonCard: View {
             .fill(Color(.systemBackground))
             .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
         )
+    }
+    
+    private func getEnglishDescription() -> String {
+        if let engDesc = digimon.descriptions.first(where: { $0.language.contains("en") })?.desc {
+            return engDesc
+        }
+        return digimon.descriptions.first?.desc ?? "No description available."
     }
 }
 
