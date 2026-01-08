@@ -16,7 +16,7 @@ protocol DigimonRepositoryNetworkProtocol {
 }
 
 extension DigimonRepository: DigimonRepositoryNetworkProtocol {
-    
+
     func mapDTOToEntity(_ dto: DigimonDTO) -> Digimon {
         return Digimon(
             digimonId: dto.id,
@@ -35,16 +35,16 @@ extension DigimonRepository: DigimonRepositoryNetworkProtocol {
             }
         )
     }
-    
+
     func fetchById(id: Int, completion: @escaping (Digimon?) -> Void) {
         fetcher.fetchDigimon(identifier: "\(id)") { [weak self] result in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let dto):
                 let entity = self.mapDTOToEntity(dto)
                 completion(entity)
-            case .failure(let error):
+            case .failure:
                 completion(nil)
             }
         }
@@ -53,17 +53,17 @@ extension DigimonRepository: DigimonRepositoryNetworkProtocol {
     func fetchByName(name: String, completion: @escaping (Digimon?) -> Void) {
         fetcher.fetchDigimon(identifier: name) { [weak self] result in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let dto):
                 let entity = self.mapDTOToEntity(dto)
                 completion(entity)
-            case .failure(let error):
+            case .failure:
                 completion(nil)
             }
         }
     }
-    
+
     func fetchPage(page: Int, completion: @escaping ([Digimon]) -> Void) {
         fetcher.fetchDigimonList(page: page) { [weak self] result in
             guard let self = self else { return }
@@ -72,11 +72,11 @@ extension DigimonRepository: DigimonRepositoryNetworkProtocol {
             case .failure(let error):
                 print("List fetch error:", error)
                 completion([])
-                
+
             case .success(let response):
                 let group = DispatchGroup()
                 var entities: [Digimon] = []
-                
+
                 for item in response.content {
                     group.enter()
                     self.fetcher.fetchDigimon(identifier: "\(item.id)") { detailResult in
@@ -87,7 +87,7 @@ extension DigimonRepository: DigimonRepositoryNetworkProtocol {
                         group.leave()
                     }
                 }
-                
+
                 /// Sort to maintain order
                 group.notify(queue: .main) {
                     let sorted = entities.sorted { $0.digimonId < $1.digimonId }
