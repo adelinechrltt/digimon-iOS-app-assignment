@@ -23,7 +23,7 @@ struct DigimonListView: View {
         NavigationStack {
             VStack {
                 SearchBar { text, category in
-                    vm.search(text: text, category: category)
+                    vm.onSearchBarUpdated(text: text, category: category)
                 }
                 if(vm.displayItems.isEmpty){
                     Spacer()
