@@ -52,15 +52,20 @@ struct DigimonListView: View {
                                     }
                                 }
                             }
+                        switch vm.selectedCategory {
+                        case .id, .name:
+                            if vm.page <= 1 {
+                                Text("Scroll to view more entries")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .padding(20)
+                                Spacer()
+                            }
+                        default:
+                            Text("")
+                        }
                     }
                     .padding(.horizontal, 10)
-                    if vm.page <= 1 {
-                        Text("Scroll to view more entries")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .padding(20)
-                        Spacer()
-                    }
                 }
             }
             .navigationTitle("Digimon")
