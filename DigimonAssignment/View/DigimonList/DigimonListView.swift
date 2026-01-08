@@ -9,23 +9,23 @@ import SwiftUI
 import SwiftData
 
 struct DigimonListView: View {
-    
+
     @Environment(\.modelContext) private var modelContext
-    @State var vm: DigimonListViewModel
-    
+    @State var viewModel: DigimonListViewModel
+
     init(modelContext: ModelContext) {
-        _vm = State(
+        _viewModel = State(
             wrappedValue: DigimonListViewModel(modelContext: modelContext)
         )
     }
-    
+
     var body: some View {
         NavigationStack {
             VStack {
                 SearchBar { text, category in
-                    vm.onSearchBarUpdated(text: text, category: category)
+                    viewModel.onSearchBarUpdated(text: text, category: category)
                 }
-                if(vm.displayItems.isEmpty){
+                if viewModel.displayItems.isEmpty {
                     Spacer()
                     Text("No entries to display!")
                         .font(.subheadline)
@@ -41,20 +41,24 @@ struct DigimonListView: View {
                                     GridItem(.flexible())
                                 ],
                             spacing: 10) {
-                                ForEach(vm.displayItems) { item in
+                                ForEach(viewModel.displayItems) { item in
                                     switch item {
                                     case .digimon(let digimon):
-                                        NavigationLink(destination: DigimonCard(cardSize: .expanded, digimon: digimon)) {
-                                            DigimonCard(cardSize: .minimized, digimon: digimon)
-                                        }
+                                        NavigationLink(
+                                            destination:
+                                                DigimonCard(
+                                                    cardSize: .expanded,
+                                                    digimon: digimon)) {
+                                                        DigimonCard(cardSize: .minimized, digimon: digimon)
+                                                    }
                                     case .metadata(let id, let name, let desc):
                                         MetadataCard(id: id, name: name, desc: desc)
                                     }
                                 }
                             }
-                        switch vm.selectedCategory {
+                        switch viewModel.selectedCategory {
                         case .id, .name:
-                            if vm.page <= 1 {
+                            if viewModel.page <= 1 {
                                 Text("Scroll to view more entries")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
@@ -71,25 +75,30 @@ struct DigimonListView: View {
             .navigationTitle("Digimon")
             .simultaneousGesture(
                 DragGesture().onEnded { value in
-                    guard vm.selectedCategory == .id || vm.selectedCategory == .name else { return }
+                    guard viewModel.selectedCategory == .id || viewModel.selectedCategory == .name else { return }
                     if value.translation.height < -50 {
-                        vm.loadNextDigimonPage()
+                        viewModel.loadNextDigimonPage()
                     }
                 }
             )
             .onAppear {
-                vm.loadNextDigimonPage()
+                viewModel.loadNextDigimonPage()
             }
         }
     }
 }
 
 #Preview {
-    let container = try! ModelContainer(
-        for: Digimon.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-    
-    DigimonListView(modelContext: container.mainContext)
+    let container: ModelContainer = {
+        let schema = Schema([Digimon.self])
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        do {
+            return try ModelContainer(for: schema, configurations: config)
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
+
+    return DigimonListView(modelContext: container.mainContext)
         .modelContainer(container)
 }
