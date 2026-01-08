@@ -25,9 +25,9 @@ struct DigimonListView: View {
                 SearchBar { text, category in
                     vm.search(text: text, category: category)
                 }
-                if(vm.digimons.isEmpty){
+                if(vm.displayItems.isEmpty){
                     Spacer()
-                    Text("No Digimon to display!")
+                    Text("No entries to display!")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     Spacer()
@@ -41,11 +41,14 @@ struct DigimonListView: View {
                                     GridItem(.flexible())
                                 ],
                             spacing: 10) {
-                                ForEach(Array(vm.digimons.enumerated()), id: \.offset) { index, digimon in
-                                    NavigationLink {
-                                        DigimonCard(cardSize: .expanded, digimon: digimon)
-                                    } label: {
-                                        DigimonCard(cardSize: .minimized, digimon: digimon)
+                                ForEach(vm.displayItems) { item in
+                                    switch item {
+                                    case .digimon(let digimon):
+                                        NavigationLink(destination: DigimonCard(cardSize: .expanded, digimon: digimon)) {
+                                            DigimonCard(cardSize: .minimized, digimon: digimon)
+                                        }
+                                    case .metadata(let id, let name, let desc):
+                                        MetadataCard(id: id, name: name, desc: desc)
                                     }
                                 }
                             }
@@ -63,6 +66,7 @@ struct DigimonListView: View {
             .navigationTitle("Digimon")
             .simultaneousGesture(
                 DragGesture().onEnded { value in
+                    guard vm.selectedCategory == .id || vm.selectedCategory == .name else { return }
                     if value.translation.height < -50 {
                         vm.loadNextPage()
                     }

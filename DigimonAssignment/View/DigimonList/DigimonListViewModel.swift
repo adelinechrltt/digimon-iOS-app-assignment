@@ -11,62 +11,109 @@ import SwiftData
 
 @Observable
 final class DigimonListViewModel {
-    private let repository: DigimonRepository
+    private let digiRepo: DigimonRepository
+    private let metadataRepo: MetadataRepository
     
-    var digimons: [Digimon] = []
+    var selectedCategory: SearchCategory = .name
+    
+    var displayItems: [DigimonDisplayItem] = []
     var isLoading = false
     var page = 0
     
     let pageSize = 8
     
     init(modelContext: ModelContext) {
-        repository = DigimonRepository(modelContext: modelContext)
+        digiRepo = DigimonRepository(modelContext: modelContext)
+        metadataRepo = MetadataRepository()
     }
     
     func loadNextPage() {
         guard !isLoading else { return }
-            isLoading = true
-            
-            repository.fetchPage(page: page) { [weak self] newEntities in
-                guard let self = self else { return }
-                
-                self.digimons.append(contentsOf: newEntities)
-                self.page += 1
-                self.isLoading = false
+        isLoading = true
+        digiRepo.fetchPage(page: page) { [weak self] newEntities in
+            let items = newEntities.map { DigimonDisplayItem.digimon($0) }
+            self?.displayItems.append(contentsOf: items)
+            self?.page += 1
+            self?.isLoading = false
         }
     }
     
     func search(text: String, category: SearchCategory) {
+        self.selectedCategory = category
+        
         guard !text.isEmpty else {
-            self.page = 0
-            self.digimons = []
-            loadNextPage()
+            switch selectedCategory {
+            case .id:
+                self.page = 0
+                loadNextPage()
+            case .name:
+                self.page = 0
+                loadNextPage()
+            case .attribute:
+                metadataRepo.fetcher.fetchAttributeList { [weak self] (result: Result<AttributeListResponseDTO, NetworkServiceError>) in
+                    guard let self = self else { return }
+                    
+                    switch result {
+                    case .success(let response):
+                        let items = response.content.fields.map { field in
+                            DigimonDisplayItem.metadata(
+                                id: field.id,
+                                name: field.name,
+                                desc: ""
+                            )
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.displayItems = items
+                            self.isLoading = false
+                        }
+                        
+                    case .failure(let error):
+                        print("Error hydrating attributes: \(error)")
+                        DispatchQueue.main.async {
+                            self.displayItems = []
+                            self.isLoading = false
+                        }
+                    }
+                }
+            case .level:
+                self.page = 0
+                loadNextPage()
+            case .type:
+                self.page = 0
+                loadNextPage()
+            case .field:
+                self.page = 0
+                loadNextPage()
+            }
             return
         }
         
         isLoading = true
-
+        
         switch category {
-        case .id:
-            if let id = Int(text) {
-                repository.fetchById(id: id) { [weak self] result in
-                    self?.handleSearchResult(result)
+        case .id, .name:
+            if category == .id, let id = Int(text) {
+                digiRepo.fetchById(id: id) { [weak self] res in self?.handleDigimonSearchResult(res) }
+            } else {
+                digiRepo.fetchByName(name: text) { [weak self] res in self?.handleDigimonSearchResult(res) }
+            }
+        case .attribute:
+            metadataRepo.fetchByName(text) { [weak self] res in
+                if let attr = res {
+                    self?.displayItems = [.metadata(id: attr.id, name: attr.name, desc: attr.desc)]
                 }
+                self?.isLoading = false
             }
-        case .name:
-            repository.fetchByName(name: text) { [weak self] result in
-                self?.handleSearchResult(result)
-            }
+            // Handle .level, .type, .field similarly...
         default:
-            print("Search for category \(category.rawValue) not implemented yet")
             isLoading = false
         }
     }
     
-    private func handleSearchResult(_ result: Digimon?) {
+    private func handleDigimonSearchResult(_ result: Digimon?) {
         DispatchQueue.main.async {
-            self.digimons = result != nil ? [result!] : []
-            self.isLoading = false
-        }
+            self.displayItems = result != nil ? [.digimon(result!)] : []
+            self.isLoading = false        }
     }
 }
