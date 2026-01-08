@@ -24,11 +24,14 @@ extension MetadataRepository: AttributeRepositoryNetworkProtocol {
             desc: dto.description
         )
     }
-    
+
     func fetchByName(_ name: String, completion: @escaping (Attribute?) -> Void) {
-        fetcher.fetchAttributeByName(name: name) { [weak self] (result: Result<AttributeListResponseDTO, NetworkServiceError>) in
+        fetcher.fetchAttributeByName(name: name) { [weak self] (
+            result: Result<AttributeListResponseDTO,
+            NetworkServiceError>
+        ) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let response):
                 guard let fields = response.content.fields, let firstMatch = fields.first else {
@@ -36,17 +39,20 @@ extension MetadataRepository: AttributeRepositoryNetworkProtocol {
                     return
                 }
                 self.fetchById(firstMatch.id, completion: completion)
-                
+
             case .failure:
                 completion(nil)
             }
         }
     }
-    
+
     func fetchById(_ id: Int, completion: @escaping (Attribute?) -> Void) {
-        fetcher.fetchAttributeById(id: "\(id)") { [weak self] (result: Result<AttributeDetailDTO, NetworkServiceError>) in
+        fetcher.fetchAttributeById(id: "\(id)") { [weak self] (
+            result: Result<AttributeDetailDTO,
+            NetworkServiceError>
+        ) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let dto):
                 completion(self.mapDTOToEntity(dto))
@@ -55,20 +61,20 @@ extension MetadataRepository: AttributeRepositoryNetworkProtocol {
             }
         }
     }
-    
+
     func fetchAll(completion: @escaping ([Attribute]) -> Void) {
         fetcher.fetchAttributeList { [weak self] (result: Result<AttributeListResponseDTO, NetworkServiceError>) in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let response):
                 let group = DispatchGroup()
                 var attributes: [Attribute] = []
-                
+
                 guard let fields = response.content.fields else {
                     return
                 }
-                
+
                 for field in fields {
                     group.enter()
                     self.fetchById(field.id) { entity in
@@ -76,7 +82,7 @@ extension MetadataRepository: AttributeRepositoryNetworkProtocol {
                         group.leave()
                     }
                 }
-                
+
                 group.notify(queue: .main) {
                     completion(attributes.sorted { $0.id < $1.id })
                 }
@@ -85,5 +91,4 @@ extension MetadataRepository: AttributeRepositoryNetworkProtocol {
             }
         }
     }
-    
 }
