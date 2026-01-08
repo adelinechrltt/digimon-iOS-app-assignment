@@ -53,7 +53,7 @@ final class DigimonFetcher: DigimonFetcherProtocol {
         -> Void
     ) {
         networkService.request(
-            urlString: DigimonEndpoint.base.urlString + "\(identifier)",
+            urlString: DigimonEndpoint.base.urlString + "/\(identifier)",
             method: .get,
             parameters: [:],
             body: nil,
