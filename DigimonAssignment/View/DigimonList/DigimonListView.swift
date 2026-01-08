@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct DigimonListView: View {
 
     var body: some View {
         VStack {
@@ -21,5 +21,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    DigimonListView()
 }
