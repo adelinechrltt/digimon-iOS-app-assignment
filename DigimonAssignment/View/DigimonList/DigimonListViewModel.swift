@@ -35,4 +35,38 @@ final class DigimonListViewModel {
                 self.isLoading = false
         }
     }
+    
+    func search(text: String, category: SearchCategory) {
+        guard !text.isEmpty else {
+            self.page = 0
+            self.digimons = []
+            loadNextPage()
+            return
+        }
+        
+        isLoading = true
+
+        switch category {
+        case .id:
+            if let id = Int(text) {
+                repository.fetchById(id: id) { [weak self] result in
+                    self?.handleSearchResult(result)
+                }
+            }
+        case .name:
+            repository.fetchByName(name: text) { [weak self] result in
+                self?.handleSearchResult(result)
+            }
+        default:
+            print("Search for category \(category.rawValue) not implemented yet")
+            isLoading = false
+        }
+    }
+    
+    private func handleSearchResult(_ result: Digimon?) {
+        DispatchQueue.main.async {
+            self.digimons = result != nil ? [result!] : []
+            self.isLoading = false
+        }
+    }
 }
