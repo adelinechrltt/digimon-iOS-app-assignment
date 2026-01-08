@@ -17,7 +17,6 @@ struct MetadataCard: View {
     
     var body: some View {
         HStack(spacing: cardSize.horizontalSpacing) {
-
                 VStack(alignment: .leading) {
                     Text("#\(id)")
                         .font(.subheadline)
@@ -27,10 +26,13 @@ struct MetadataCard: View {
                         .font(.headline)
                         .foregroundColor(.primary)
 
-                    Text(desc)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    if desc != "" {
+                        Text(desc)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
+            Spacer()
         }
         .padding(.vertical, cardSize.verticalPadding)
         .padding(.horizontal, cardSize.horizontalPadding)

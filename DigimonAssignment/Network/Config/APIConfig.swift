@@ -8,7 +8,7 @@
 import Foundation
 
 enum APIConfig {
-    static let digimonURL = "https://digi-api.com/api/v1/digimon/"
+    static let digimonURL = "https://digi-api.com/api/v1/"
 }
 
 protocol EndpointProtocol {

@@ -11,62 +11,19 @@ import SwiftData
 
 @Observable
 final class DigimonListViewModel {
-    private let repository: DigimonRepository
+    let digiRepo: DigimonRepository
+    let metadataRepo: MetadataRepository
     
-    var digimons: [Digimon] = []
+    var selectedCategory: SearchCategory = .name
+    
+    var displayItems: [DigimonDisplayItem] = []
     var isLoading = false
     var page = 0
     
     let pageSize = 8
     
     init(modelContext: ModelContext) {
-        repository = DigimonRepository(modelContext: modelContext)
-    }
-    
-    func loadNextPage() {
-        guard !isLoading else { return }
-            isLoading = true
-            
-            repository.fetchPage(page: page) { [weak self] newEntities in
-                guard let self = self else { return }
-                
-                self.digimons.append(contentsOf: newEntities)
-                self.page += 1
-                self.isLoading = false
-        }
-    }
-    
-    func search(text: String, category: SearchCategory) {
-        guard !text.isEmpty else {
-            self.page = 0
-            self.digimons = []
-            loadNextPage()
-            return
-        }
-        
-        isLoading = true
-
-        switch category {
-        case .id:
-            if let id = Int(text) {
-                repository.fetchById(id: id) { [weak self] result in
-                    self?.handleSearchResult(result)
-                }
-            }
-        case .name:
-            repository.fetchByName(name: text) { [weak self] result in
-                self?.handleSearchResult(result)
-            }
-        default:
-            print("Search for category \(category.rawValue) not implemented yet")
-            isLoading = false
-        }
-    }
-    
-    private func handleSearchResult(_ result: Digimon?) {
-        DispatchQueue.main.async {
-            self.digimons = result != nil ? [result!] : []
-            self.isLoading = false
-        }
+        digiRepo = DigimonRepository(modelContext: modelContext)
+        metadataRepo = MetadataRepository()
     }
 }
