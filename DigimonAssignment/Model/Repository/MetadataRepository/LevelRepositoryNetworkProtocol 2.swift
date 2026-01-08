@@ -1,14 +1,3 @@
-//
-//  AttributeRepositoryNetworkProtocol.swift
-//  DigimonAssignment
-//
-//  Created by Adeline Charlotte Augustinne on 09/01/26.
-//
-
-
-import Foundation
-import SwiftData
-
 /// For data layer communication with network layer
 protocol LevelRepositoryNetworkProtocol {
     func mapDTOToEntity(_ dto: LevelDetailDTO) -> Level
