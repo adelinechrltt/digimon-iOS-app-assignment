@@ -46,7 +46,13 @@ extension DigimonListViewModel: DigimonListVMSearchProtocol {
                 }
                 self?.isLoading = false
             }
-            // Handle .level, .type, .field similarly...
+        case .level:
+            metadataRepo.fetchLevelByName(text) { [weak self] res in
+                if let attr = res {
+                    self?.displayItems = [.metadata(id: attr.id, name: attr.name, desc: attr.desc)]
+                }
+                self?.isLoading = false
+            }
         default:
             isLoading = false
         }
