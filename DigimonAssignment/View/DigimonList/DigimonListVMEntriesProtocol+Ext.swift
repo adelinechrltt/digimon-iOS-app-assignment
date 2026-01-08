@@ -14,10 +14,11 @@ protocol DigimonListVMEntriesProtocol {
     func resetDisplayList()
     func hydrateAttributesList()
     func hydrateLevelsList()
+    func hydrateFieldsList()
 }
 
 extension DigimonListViewModel: DigimonListVMEntriesProtocol {
-    
+   
     func loadNextDigimonPage() {
         guard !isLoading else { return }
         isLoading = true
@@ -41,8 +42,7 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
         case .type:
             hydrateTypesList()
         case .field:
-            self.page = 0
-            loadNextDigimonPage()
+            hydrateFieldsList()
         }
     }
     
@@ -125,6 +125,35 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
                 
             case .failure(let error):
                 print("Error hydrating types: \(error)")
+                DispatchQueue.main.async {
+                    self.displayItems = []
+                    self.isLoading = false
+                }
+            }
+        }
+    }
+    
+    func hydrateFieldsList() {
+        metadataRepo.fetcher.fetchFieldList { [weak self] (result: Result<FieldListResponseDTO, NetworkServiceError>) in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let response):
+                let items = (response.content.fields ?? []).map { field in
+                    DigimonDisplayItem.metadata(
+                        id: field.id,
+                        name: field.name,
+                        desc: ""
+                    )
+                }
+                
+                DispatchQueue.main.async {
+                    self.displayItems = items
+                    self.isLoading = false
+                }
+                
+            case .failure(let error):
+                print("Error hydrating fields: \(error)")
                 DispatchQueue.main.async {
                     self.displayItems = []
                     self.isLoading = false
