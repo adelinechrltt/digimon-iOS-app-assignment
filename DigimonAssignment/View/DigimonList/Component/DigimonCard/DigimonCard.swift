@@ -147,7 +147,7 @@ struct DigimonCard: View {
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
-                        Text(digimon.descriptions.first?.desc ?? "")
+                        Text(getEnglishDescription())
                             .font(.caption)
                             .foregroundColor(.primary)
                     }
@@ -164,6 +164,13 @@ struct DigimonCard: View {
             .fill(Color(.systemBackground))
             .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
         )
+    }
+    
+    private func getEnglishDescription() -> String {
+        if let engDesc = digimon.descriptions.first(where: { $0.language.contains("en") })?.desc {
+            return engDesc
+        }
+        return digimon.descriptions.first?.desc ?? "No description available."
     }
 }
 
