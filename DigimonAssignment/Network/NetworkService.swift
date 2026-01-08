@@ -43,13 +43,13 @@ final class NetworkService: NetworkServiceProtocol {
             completion(.failure(.invalidURL))
             return nil
         }
-        
+
         if !parameters.isEmpty {
             components.queryItems = parameters.map { key, value in
                 URLQueryItem(name: key, value: "\(value)")
             }
         }
-        
+
         guard let url: URL = components.url else {
             completion(.failure(.invalidURL))
             return nil
@@ -163,7 +163,10 @@ final class NetworkService: NetworkServiceProtocol {
 }
 
 private extension NetworkService {
-    func completeOnMain<T>(_ result: Result<T, NetworkServiceError>, _ completion: @escaping (Result<T, NetworkServiceError>) -> Void) {
+    func completeOnMain<T>(
+        _ result: Result<T,
+        NetworkServiceError>,
+        _ completion: @escaping (Result<T, NetworkServiceError>) -> Void) {
         DispatchQueue.main.async {
             completion(result)
         }

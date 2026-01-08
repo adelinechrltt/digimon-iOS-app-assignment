@@ -8,10 +8,10 @@
 import Foundation
 
 final class MetadataFetcher {
-    
+
     init(networkService: NetworkServiceProtocol = NetworkService.shared) {
         self.networkService = networkService
     }
-    
+
     let networkService: NetworkServiceProtocol
 }
