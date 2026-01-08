@@ -10,7 +10,7 @@ import Foundation
 struct AttributeContentDTO: JSONCodable {
     let name: String
     let description: String
-    let fields: [AttributeSummaryDTO]
+    let fields: [AttributeSummaryDTO]?
 
     private enum CodingKeys: String, CodingKey {
         case name

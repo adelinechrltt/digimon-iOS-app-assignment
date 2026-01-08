@@ -97,9 +97,9 @@ extension MetadataFetcher: AttributeFetcherProtocol {
         ) -> Void
     ) {
         networkService.request(
-            urlString: DigimonEndpoint.attribute.urlString,
+            urlString: DigimonEndpoint.attribute.urlString + "/\(id)",
             method: .get,
-            parameters: ["id": id],
+            parameters: [:],
             body: nil,
             completion: completion)
     }

@@ -53,7 +53,7 @@ extension DigimonListViewModel: DigimonListVMEntriesProtocol {
             
             switch result {
             case .success(let response):
-                let items = response.content.fields.map { field in
+                let items = (response.content.fields ?? []).map { field in
                     DigimonDisplayItem.metadata(
                         id: field.id,
                         name: field.name,

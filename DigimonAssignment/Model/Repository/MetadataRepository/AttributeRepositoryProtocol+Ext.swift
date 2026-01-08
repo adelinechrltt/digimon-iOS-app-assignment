@@ -31,7 +31,7 @@ extension MetadataRepository: AttributeRepositoryNetworkProtocol {
             
             switch result {
             case .success(let response):
-                guard let firstMatch = response.content.fields.first else {
+                guard let fields = response.content.fields, let firstMatch = fields.first else {
                     completion(nil)
                     return
                 }
@@ -65,7 +65,11 @@ extension MetadataRepository: AttributeRepositoryNetworkProtocol {
                 let group = DispatchGroup()
                 var attributes: [Attribute] = []
                 
-                for field in response.content.fields {
+                guard let fields = response.content.fields else {
+                    return
+                }
+                
+                for field in fields {
                     group.enter()
                     self.fetchById(field.id) { entity in
                         if let entity = entity { attributes.append(entity) }
