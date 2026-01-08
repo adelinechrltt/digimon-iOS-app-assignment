@@ -6,10 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct DigimonListView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @State var vm: DigimonListViewModel
+    
+    init(modelContext: ModelContext) {
+        _vm = State(
+            wrappedValue: DigimonListViewModel(modelContext: modelContext)
+        )
+    }
     
     var body: some View {
         NavigationStack {
@@ -25,41 +33,42 @@ struct DigimonListView: View {
                         spacing: 10) {
                             ForEach(Array(vm.digimons.enumerated()), id: \.offset) { index, digimon in
                                 NavigationLink {
-                                    DigimonCard(
-                                        cardSize: .expanded,
-                                        digimon: digimon)
+                                    DigimonCard(cardSize: .expanded, digimon: digimon)
                                 } label: {
-                                    DigimonCard(
-                                        cardSize: .minimized,
-                                        digimon: digimon)
+                                    DigimonCard(cardSize: .minimized, digimon: digimon)
                                 }
                             }
                         }
-                        .padding(.horizontal, 10)
-                    if vm.page <= 1 {
-                        Text("Scroll to view more entries")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .padding(20)
+                }
+                .padding(.horizontal, 10)
+                if vm.page <= 1 {
+                    Text("Scroll to view more entries")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .padding(20)
+                }
+            }
+            .navigationTitle("Digimon")
+            .simultaneousGesture(
+                DragGesture().onEnded { value in
+                    if value.translation.height < -50 {
+                        vm.loadNextPage()
                     }
                 }
-                .navigationTitle("Digimon")
-                .simultaneousGesture(
-                    DragGesture().onEnded { value in
-                        if value.translation.height < -50 {
-                            vm.loadNextPage()
-                        }
-                    }
-                )
-                .onAppear {
-                    if vm.digimons.isEmpty { vm.loadNextPage() }
-                }
-
+            )
+            .onAppear {
+                vm.loadNextPage()
             }
         }
     }
 }
 
 #Preview {
-    DigimonListView(vm: DigimonListViewModel())
+    let container = try! ModelContainer(
+        for: Digimon.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    
+    DigimonListView(modelContext: container.mainContext)
+        .modelContainer(container)
 }

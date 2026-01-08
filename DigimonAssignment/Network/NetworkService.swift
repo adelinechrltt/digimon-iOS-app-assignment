@@ -39,7 +39,18 @@ final class NetworkService: NetworkServiceProtocol {
         completion: @escaping (Result<T, NetworkServiceError>) -> Void
     ) -> URLSessionDataTask? {
 
-        guard let url: URL = URL(string: urlString) else {
+        guard var components = URLComponents(string: urlString) else {
+            completion(.failure(.invalidURL))
+            return nil
+        }
+        
+        if !parameters.isEmpty {
+            components.queryItems = parameters.map { key, value in
+                URLQueryItem(name: key, value: "\(value)")
+            }
+        }
+        
+        guard let url: URL = components.url else {
             completion(.failure(.invalidURL))
             return nil
         }
