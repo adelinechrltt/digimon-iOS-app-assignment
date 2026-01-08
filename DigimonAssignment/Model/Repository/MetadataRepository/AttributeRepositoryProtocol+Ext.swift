@@ -12,10 +12,12 @@ import SwiftData
 /// For data layer communication with network layer
 protocol AttributeRepositoryNetworkProtocol {
     func mapDTOToEntity(_ dto: AttributeDetailDTO) -> Attribute
-    func fetchPage(page: Int, completion: @escaping ([Attribute]) -> Void)
+    func fetchAll(completion: @escaping ([Attribute]) -> Void)
+    func fetchById(_ id: Int, completion: @escaping (Attribute?) -> Void)
+    func fetchByName(_ id: Int, completion: @escaping (Attribute?) -> Void)
 }
 
-extension MetadataRepository: DigimonRepositoryNetworkProtocol {
+extension MetadataRepository: AttributeRepositoryNetworkProtocol {
     
     func mapDTOToEntity(_ dto: DigimonDTO) -> Digimon {
         return Digimon(
