@@ -87,7 +87,6 @@ struct DigimonCard: View {
                                 .fontWeight(.bold)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
-
                             HStack {
                                 VStack {
                                     Text("Level")
