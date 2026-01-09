@@ -81,8 +81,29 @@ struct DigimonListView: View {
                     }
                 }
             )
+            .onChange(of: viewModel.networkMonitor.isConnected) { _, newValue in
+                guard let isConnected = newValue else { return }
+                if isConnected {
+                    viewModel.loadNextDigimonPage()
+                    viewModel.showOfflineAlert = false
+                } else {
+                    viewModel.showOfflineAlert = true
+                }
+            }
+            .alert("No Internet Connection",
+                   isPresented: $viewModel.showOfflineAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Please reconfigure your network settings.")
+            }
             .onAppear {
-                viewModel.loadNextDigimonPage()
+                if let isConnected = viewModel.networkMonitor.isConnected {
+                    if isConnected {
+                        viewModel.loadNextDigimonPage()
+                    } else {
+                        viewModel.showOfflineAlert = true
+                    }
+                }
             }
         }
     }

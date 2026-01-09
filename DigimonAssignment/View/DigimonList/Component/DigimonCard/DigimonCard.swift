@@ -85,7 +85,8 @@ struct DigimonCard: View {
                                 .font(.title2)
                                 .foregroundColor(.primary)
                                 .fontWeight(.bold)
-
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
                             HStack {
                                 VStack {
                                     Text("Level")
@@ -142,14 +143,17 @@ struct DigimonCard: View {
                         }
                     }
 
-                    VStack(spacing: 2) {
-                        Text("Description")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                        Text(getEnglishDescription())
-                            .font(.caption)
-                            .foregroundColor(.primary)
+                    if let firstDesc = digimon.descriptions.first,
+                       firstDesc.desc != "" {
+                        VStack(spacing: 2) {
+                            Text("Description")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            Text(getEnglishDescription())
+                                .font(.caption)
+                                .foregroundColor(.primary)
+                        }
                     }
                 }
             }
