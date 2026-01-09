@@ -13,17 +13,22 @@ import SwiftData
 final class DigimonListViewModel {
     let digiRepo: DigimonRepository
     let metadataRepo: MetadataRepository
+    
+    let networkMonitor: NetworkMonitor
 
     var selectedCategory: SearchCategory = .name
 
     var displayItems: [DigimonDisplayItem] = []
+    
     var isLoading = false
     var page = 0
-
     let pageSize = 8
+    
+    var showOfflineAlert: Bool = false
 
     init(modelContext: ModelContext) {
         digiRepo = DigimonRepository(modelContext: modelContext)
         metadataRepo = MetadataRepository()
+        networkMonitor = NetworkMonitor.shared
     }
 }
