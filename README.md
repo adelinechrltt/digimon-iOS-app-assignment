@@ -46,5 +46,7 @@ Allows users to browse and search Digimon, attributes, list, fields, and types d
 ## v2.0 Offline-first Integration
 
 - [ ] Offline-first caching strategy with **SwiftData** and **Single Source of Truth (SSOT)** design pattern
+  - UML diagrams for offline-first design strategy accessible through the following link:
+    🔗 TBA
 
 - [ ] Enable image caching with **Kingfisher** via CocoaPods
